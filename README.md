@@ -1,16 +1,91 @@
-# React + Vite
+# TaskFlow – Task Management App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+TaskFlow is a simple and responsive task management application built with React. It helps users organize their daily tasks, track progress, and manage priorities in one place.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Task Management:** Add, edit, and delete tasks.
+- **Task Status:** Mark tasks as completed or pending.
+- **Priority Levels:** Assign Low, Medium, or High priority to tasks.
+- **Due Dates:** Set deadlines for tasks.
+- **Search:** Find tasks quickly by their titles.
+- **Filtering:** Filter tasks by All, Pending, and Completed.
+- **Statistics:** Track total, completed, and pending tasks.
+- **Local Storage:** Automatically save tasks in the browser.
+- **Responsive Design:** Works across different screen sizes.
 
-## React Compiler
+## Technologies Used
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React
+- JavaScript (ES6+)
+- HTML5
+- CSS3
+- Bootstrap
+- Vite
+- Browser Local Storage
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Prerequisites
+
+Make sure you have Node.js and npm installed.
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/remohammed43-code/Task-Flow.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd Task-Flow
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+4. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+5. Open the local URL provided by Vite in your browser.
+
+## Project Structure
+
+```text
+Task-Flow/
+├── public/
+├── src/
+│   ├── components/
+│   ├── App.jsx
+│   ├── App.css
+│   └── main.jsx
+├── index.html
+├── package.json
+└── vite.config.js
+```
+
+## Future Improvements
+
+- Kanban board view.
+- Task descriptions.
+- Improved task management and user experience.
+- Backend integration and user authentication.
+
+## Author
+
+**Mohamad Rayyha**
+
+GitHub: [@remohammed43-code](https://github.com/remohammed43-code)
+
+---
+
+Built with React and a focus on learning and improving Front-End development skills.
