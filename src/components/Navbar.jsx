@@ -1,3 +1,5 @@
+import { NavLink } from "react-router-dom";
+
 function Navbar({ search, setSearch }) {
   return (
     <header className="navbar-shell">
@@ -5,6 +7,14 @@ function Navbar({ search, setSearch }) {
         <div className="brand-wrap">
           <div className="brand-mark">T</div>
           <span className="brand-name">TaskFlow</span>
+        </div>
+        <div className="nav-links" aria-label="Main navigation">
+          <NavLink to="/" end>
+            Dashboard
+          </NavLink>
+          <NavLink to="/calendar">
+            Calendar
+          </NavLink>
         </div>
 
         <label className="searchbox" aria-label="Search tasks">

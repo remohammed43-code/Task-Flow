@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import Navbar from "./components/Navbar";
 import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Calendar from "./pages/Calendar";
 
 function getPriority(value) {
   return ["low", "medium", "high"].includes(value) ? value : "medium";
@@ -115,195 +117,214 @@ function App() {
   }
 
   return (
-    <>
+    <BrowserRouter>
       <Navbar search={search} setSearch={setSearch} />
 
-      <main className="app-shell">
-        <section className="top-panel">
-          <div className="hero-card">
-            <p className="eyebrow">TaskFlow dashboard</p>
-            <h1>Organize your day with clarity.</h1>
-            <p className="subtitle">
-              Turn scattered tasks into a focused plan and keep momentum all day.
-            </p>
-          </div>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <main className="app-shell">
+                <section className="top-panel">
+                  <div className="hero-card">
+                    <p className="eyebrow">TaskFlow dashboard</p>
+                    <h1>Organize your day with clarity.</h1>
+                    <p className="subtitle">
+                      Turn scattered tasks into a focused plan and keep momentum all day.
+                    </p>
+                  </div>
 
-          <div className="stats-grid">
-            <article className="stat-card accent">
-              <span>Total</span>
-              <strong>{totalTasks}</strong>
-            </article>
-            <article className="stat-card">
-              <span>Open</span>
-              <strong>{pendingTasks}</strong>
-            </article>
-            <article className="stat-card">
-              <span>Done</span>
-              <strong>{completedTasks}</strong>
-            </article>
-          </div>
-        </section>
+                  <div className="stats-grid">
+                    <article className="stat-card accent">
+                      <span>Total</span>
+                      <strong>{totalTasks}</strong>
+                    </article>
+                    <article className="stat-card">
+                      <span>Open</span>
+                      <strong>{pendingTasks}</strong>
+                    </article>
+                    <article className="stat-card">
+                      <span>Done</span>
+                      <strong>{completedTasks}</strong>
+                    </article>
+                  </div>
+                </section>
 
-        <section className="composer-card">
-          <div className="panel-head">
-            <h2>New task</h2>
-            <span>{pendingTasks} open</span>
-          </div>
+                <section className="composer-card">
+                  <div className="panel-head">
+                    <h2>New task</h2>
+                    <span>{pendingTasks} open</span>
+                  </div>
 
-          <form
-            className="task-form"
-            onSubmit={(event) => {
-              event.preventDefault();
-              addTask();
-            }}
-          >
-            <label className="input-group input-wide">
-              <span>Task name</span>
-              <input
-                type="text"
-                value={task}
-                onChange={(event) => setTask(event.target.value)}
-                placeholder="Write down your next task"
-              />
-            </label>
-
-            <label className="input-group">
-              <span>Due date</span>
-              <input
-                type="date"
-                value={dueDate}
-                onChange={(event) => setDueDate(event.target.value)}
-              />
-            </label>
-            <label className="input-group">
-              <span>Priority</span>
-              <select
-                className="priority-select"
-                value={priority}
-                onChange={(event) => setPriority(event.target.value)}
-              >
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-              </select>
-            </label>
-
-            <button type="submit" className="primary-btn">
-              Add task
-            </button>
-          </form>
-        </section>
-
-        <section className="list-card">
-          <div className="panel-head panel-head-split">
-            <h2>Your tasks</h2>
-
-            <div className="filter-group" aria-label="Task filter options">
-              {[
-                { value: "all", label: "All" },
-                { value: "pending", label: "Pending" },
-                { value: "completed", label: "Done" },
-              ].map((option) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  className={filter === option.value ? "filter-btn active" : "filter-btn"}
-                  onClick={() => setFilter(option.value)}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {filteredTasks.length === 0 ? (
-            <div className="empty-state">
-              <p>No tasks match your filter.</p>
-              <span>Try a different search or add a fresh priority.</span>
-            </div>
-          ) : (
-            <ul className="task-list">
-              {filteredTasks.map((item) => (
-                <li
-                  className={`task-item priority-${getPriority(item.priority)}${item.completed ? " done" : ""}`}
-                  key={item.id}
-                >
-                  <button
-                    type="button"
-                    className={item.completed ? "check-button complete" : "check-button"}
-                    onClick={() => toggleTask(item.id)}
-                    aria-label={item.completed ? "Mark task as incomplete" : "Mark task as complete"}
+                  <form
+                    className="task-form"
+                    onSubmit={(event) => {
+                      event.preventDefault();
+                      addTask();
+                    }}
                   >
-                    {item.completed ? "✓" : ""}
-                  </button>
-
-                  {editId === item.id ? (
-                    <div className="task-editor">
+                    <label className="input-group input-wide">
+                      <span>Task name</span>
                       <input
                         type="text"
-                        value={editText}
-                        onChange={(event) => setEditText(event.target.value)}
-                        className="edit-input"
-                        autoFocus
+                        value={task}
+                        onChange={(event) => setTask(event.target.value)}
+                        placeholder="Write down your next task"
                       />
+                    </label>
 
-                      <div className="inline-actions">
-                        <button type="button" className="small-btn success" onClick={() => saveEdit(item.id)}>
-                          Save
-                        </button>
+                    <label className="input-group">
+                      <span>Due date</span>
+                      <input
+                        type="date"
+                        value={dueDate}
+                        onChange={(event) => setDueDate(event.target.value)}
+                      />
+                    </label>
+                    <label className="input-group">
+                      <span>Priority</span>
+                      <select
+                        className="priority-select"
+                        value={priority}
+                        onChange={(event) => setPriority(event.target.value)}
+                      >
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                      </select>
+                    </label>
+
+                    <button type="submit" className="primary-btn">
+                      Add task
+                    </button>
+                  </form>
+                </section>
+
+                <section className="list-card">
+                  <div className="panel-head panel-head-split">
+                    <h2>Your tasks</h2>
+
+                    <div className="filter-group" aria-label="Task filter options">
+                      {[
+                        { value: "all", label: "All" },
+                        { value: "pending", label: "Pending" },
+                        { value: "completed", label: "Done" },
+                      ].map((option) => (
                         <button
+                          key={option.value}
                           type="button"
-                          className="small-btn secondary"
-                          onClick={() => {
-                            setEditId(null);
-                            setEditText("");
-                          }}
+                          className={filter === option.value ? "filter-btn active" : "filter-btn"}
+                          onClick={() => setFilter(option.value)}
                         >
-                          Cancel
+                          {option.label}
                         </button>
-                      </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {filteredTasks.length === 0 ? (
+                    <div className="empty-state">
+                      <p>No tasks match your filter.</p>
+                      <span>Try a different search or add a fresh priority.</span>
                     </div>
                   ) : (
-                    <>
-                      <div className="task-copy">
-                        <p className={item.completed ? "task-text done" : "task-text"}>{item.text}
-                          <span className={`priority-badge priority-${getPriority(item.priority)}`}>
-                            {getPriority(item.priority)}
-                          </span>
-                        </p>
-                        {item.dueDate && <span className="due-chip">Due {formatDate(item.dueDate)}</span>}
-                      </div>
-
-                      <div className="item-actions">
-                        <select
-                          className={`priority-select task-priority-select priority-${getPriority(item.priority)}`}
-                          value={getPriority(item.priority)}
-                          onChange={(event) => updatePriority(item.id, event.target.value)}
-                          aria-label={`Priority for ${item.text}`}
+                    <ul className="task-list">
+                      {filteredTasks.map((item) => (
+                        <li
+                          className={`task-item priority-${getPriority(item.priority)}${item.completed ? " done" : ""}`}
+                          key={item.id}
                         >
-                          <option value="low">Low</option>
-                          <option value="medium">Medium</option>
-                          <option value="high">High</option>
-                        </select>
-                        <button type="button" className="small-btn secondary" onClick={() => {
-                          setEditId(item.id);
-                          setEditText(item.text);
-                        }}>
-                          Edit
-                        </button>
-                        <button type="button" className="small-btn danger" onClick={() => deleteTask(item.id)}>
-                          Delete
-                        </button>
-                      </div>
-                    </>
+                          <button
+                            type="button"
+                            className={item.completed ? "check-button complete" : "check-button"}
+                            onClick={() => toggleTask(item.id)}
+                            aria-label={item.completed ? "Mark task as incomplete" : "Mark task as complete"}
+                          >
+                            {item.completed ? "✓" : ""}
+                          </button>
+
+                          {editId === item.id ? (
+                            <div className="task-editor">
+                              <input
+                                type="text"
+                                value={editText}
+                                onChange={(event) => setEditText(event.target.value)}
+                                className="edit-input"
+                                autoFocus
+                              />
+
+                              <div className="inline-actions">
+                                <button type="button" className="small-btn success" onClick={() => saveEdit(item.id)}>
+                                  Save
+                                </button>
+                                <button
+                                  type="button"
+                                  className="small-btn secondary"
+                                  onClick={() => {
+                                    setEditId(null);
+                                    setEditText("");
+                                  }}
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <>
+                              <div className="task-copy">
+                                <p className={item.completed ? "task-text done" : "task-text"}>{item.text}
+                                  <span className={`priority-badge priority-${getPriority(item.priority)}`}>
+                                    {getPriority(item.priority)}
+                                  </span>
+                                </p>
+                                {item.dueDate && <span className="due-chip">Due {formatDate(item.dueDate)}</span>}
+                              </div>
+
+                              <div className="item-actions">
+                                <select
+                                  className={`priority-select task-priority-select priority-${getPriority(item.priority)}`}
+                                  value={getPriority(item.priority)}
+                                  onChange={(event) => updatePriority(item.id, event.target.value)}
+                                  aria-label={`Priority for ${item.text}`}
+                                >
+                                  <option value="low">Low</option>
+                                  <option value="medium">Medium</option>
+                                  <option value="high">High</option>
+                                </select>
+                                <button
+                                  type="button"
+                                  className="small-btn secondary"
+                                  onClick={() => {
+                                    setEditId(item.id);
+                                    setEditText(item.text);
+                                  }}
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  type="button"
+                                  className="small-btn danger"
+                                  onClick={() => deleteTask(item.id)}
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
                   )}
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      </main>
-    </>
+                </section>
+              </main>
+            </>
+          }
+        />
+
+        <Route path="/calendar" element={<Calendar tasks={tasks} />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
