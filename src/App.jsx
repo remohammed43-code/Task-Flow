@@ -8,11 +8,76 @@ function getPriority(value) {
   return ["low", "medium", "high"].includes(value) ? value : "medium";
 }
 
+function getDaysDifference(dueDate) {
+  if (!dueDate) return null;
+
+  const [year, month, day] = dueDate.split("-").map(Number);
+  const due = new Date(year, month - 1, day);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (
+    Number.isNaN(due.getTime()) ||
+    due.getFullYear() !== year ||
+    due.getMonth() !== month - 1 ||
+    due.getDate() !== day
+  ) {
+    return null;
+  }
+
+  return Math.round((due - today) / (1000 * 60 * 60 * 24));
+}
+
+function getTaskDeadlineStatus(task) {
+  if (task.completed || !task.dueDate) {
+    return null;
+  }
+
+  const days = getDaysDifference(task.dueDate);
+
+  if (days === null) {
+    return null;
+  }
+
+  if (days === 0) {
+    return {
+      text: "Due today",
+      type: "today",
+    };
+  }
+
+  if (days > 0) {
+    return {
+      text: `${days} ${days === 1 ? "day" : "days"} left`,
+      type: "upcoming",
+    };
+  }
+
+  return {
+    text: `Overdue by ${Math.abs(days)} ${days === -1 ? "day" : "days"}`,
+    type: "overdue",
+  };
+}
+
+function TaskDeadlineStatus({ task }) {
+  const status = getTaskDeadlineStatus(task);
+
+  if (!status) return null;
+
+  return (
+    <span className={`deadline-status deadline-${status.type}`}>
+      {status.text}
+    </span>
+  );
+}
+
 function App() {
   const [task, setTask] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
+  const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("medium");
   const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem("tasks");
@@ -36,9 +101,10 @@ function App() {
         (filter === "completed" && item.completed) ||
         (filter === "pending" && !item.completed);
 
-      const matchesSearch = item.text
-        .toLowerCase()
-        .includes(search.trim().toLowerCase());
+      const searchTerm = search.trim().toLowerCase();
+      const matchesSearch =
+        item.text.toLowerCase().includes(searchTerm) ||
+        (item.description || "").toLowerCase().includes(searchTerm);
 
       return matchesFilter && matchesSearch;
     });
@@ -54,6 +120,7 @@ function App() {
       {
         id: crypto.randomUUID(),
         text: task.trim(),
+        description: description.trim(),
         completed: false,
         dueDate,
         priority,
@@ -61,6 +128,7 @@ function App() {
     ]);
 
     setTask("");
+    setDescription("");
     setDueDate("");
     setPriority("medium");
   }
@@ -173,7 +241,16 @@ function App() {
                         placeholder="Write down your next task"
                       />
                     </label>
-
+                   <label className="input-group description-group">
+                     <span>Description</span>
+                     <textarea
+                       className="description-input"
+                       placeholder="Add a few details (optional)"
+                       value={description}
+                       onChange={(event) => setDescription(event.target.value)}
+                       rows={3}
+                     />
+                   </label>
                     <label className="input-group">
                       <span>Due date</span>
                       <input
@@ -273,12 +350,25 @@ function App() {
                           ) : (
                             <>
                               <div className="task-copy">
-                                <p className={item.completed ? "task-text done" : "task-text"}>{item.text}
+                                <p className={item.completed ? "task-text done" : "task-text"}>
+                                  {item.text}
                                   <span className={`priority-badge priority-${getPriority(item.priority)}`}>
                                     {getPriority(item.priority)}
                                   </span>
                                 </p>
-                                {item.dueDate && <span className="due-chip">Due {formatDate(item.dueDate)}</span>}
+
+                                {item.description && (
+                                  <p className="task-description">{item.description}</p>
+                                )}
+
+                                {item.dueDate && (
+                                  <div className="task-meta">
+                                    <span className="due-chip">
+                                      Due {formatDate(item.dueDate)}
+                                    </span>
+                                    <TaskDeadlineStatus task={item} />
+                                  </div>
+                                )}
                               </div>
 
                               <div className="item-actions">

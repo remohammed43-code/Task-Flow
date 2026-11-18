@@ -260,6 +260,28 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+.description-group {
+  flex: 1 1 100%;
+}
+
+.description-input {
+  width: 100%;
+  min-height: 92px;
+  resize: vertical;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.7);
+  color: #f8fafc;
+  padding: 12px 14px;
+  font: inherit;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.description-input::placeholder {
+  color: #94a3b8;
+}
+
 .priority-select {
   min-width: 100px;
   border: 1px solid rgba(148, 163, 184, 0.2);
@@ -281,6 +303,7 @@
 }
 
 .input-group input:focus,
+.description-input:focus,
 .edit-input:focus {
   border-color: rgba(96, 165, 250, 0.8);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
@@ -351,7 +374,7 @@
 
 .task-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
   padding: 18px 16px;
   border: 1px solid rgba(148, 163, 184, 0.14);
@@ -451,6 +474,22 @@
   min-width: 0;
 }
 
+.task-description {
+  margin: 8px 0 0;
+  color: #a7b3c8;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
 .task-text {
   margin: 0;
   color: #f8fafc;
@@ -465,12 +504,40 @@
 
 .due-chip {
   display: inline-flex;
-  margin-top: 8px;
+  align-items: center;
   padding: 5px 9px;
   border-radius: 999px;
   background: rgba(59, 130, 246, 0.1);
   color: #bfdbfe;
   font-size: 0.72rem;
+}
+
+.deadline-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.deadline-upcoming {
+  border-color: rgba(96, 165, 250, 0.3);
+  background: rgba(59, 130, 246, 0.1);
+  color: #bfdbfe;
+}
+
+.deadline-today {
+  border-color: rgba(251, 191, 36, 0.32);
+  background: rgba(245, 158, 11, 0.12);
+  color: #fde68a;
+}
+
+.deadline-overdue {
+  border-color: rgba(251, 113, 133, 0.32);
+  background: rgba(244, 63, 94, 0.12);
+  color: #fda4af;
 }
 
 .item-actions,
